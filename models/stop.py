@@ -9,6 +9,7 @@ class Stop:
         self.lon = lon
 
         self.stop_times = []
+        self.exchange = None
     
     def __str__(self):
         return self.name
@@ -23,6 +24,20 @@ class Stop:
     @property
     def routes(self):
         return sorted({ s.trip.route for s in self.stop_times })
+
+    @property
+    def routes_string(self):
+        return ', '.join([str(r.number) for r in self.routes])
+    
+    @property
+    def json_data(self):
+        return {
+            'id': self.id,
+            'number': self.number,
+            'name': self.name,
+            'lat': self.lat,
+            'lon': self.lon
+        }
     
     def add_stop_time(self, stop_time):
         self.stop_times.append(stop_time)

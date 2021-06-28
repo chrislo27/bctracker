@@ -5,8 +5,10 @@ from shutil import rmtree
 
 import wget
 import csv
+import re
 
 from models.block import Block
+from models.exchange import Exchange
 from models.route import Route
 from models.service import Service
 from models.shape import Shape
@@ -15,6 +17,8 @@ from models.stop_time import StopTime
 from models.trip import Trip
 
 from formatting import format_csv
+
+EXCHANGE_PATTERN = re.compile('[\W_]+')
 
 def update(system):
     data_zip_path = f'data/gtfs/{system.id}.zip'
@@ -136,6 +140,7 @@ def load_stop_times(system):
         stop_time.trip.add_stop_time(stop_time)
 
 def load_stops(system):
+    system.exchanges = {}
     system.stops = {}
     system.stops_by_number = {}
     for values in read_csv(system, 'stops'):
@@ -152,6 +157,15 @@ def load_stops(system):
 
         system.stops[stop_id] = stop
         system.stops_by_number[number] = stop
+        
+        if "Exchange" in name:
+            exchange_name = name.split("Exchange")[0] + "Exchange"
+            exchange_id = EXCHANGE_PATTERN.sub('', exchange_name)
+            exchange = system.get_exchange(exchange_id)
+            if exchange is None:
+                exchange = Exchange(system, exchange_id, exchange_name)
+                system.add_exchange(exchange)
+            exchange.add_stop(stop)
 
 def load_trips(system):
     system.trips = {}
@@ -168,7 +182,7 @@ def load_trips(system):
             continue
         block_id = values['block_id']
         if block_id not in system.blocks:
-            system.blocks[block_id] = Block(system, block_id, service_id)
+            system.add_block(Block(system, block_id, service_id))
         direction_id = int(values['direction_id'])
         shape_id = values['shape_id']
         headsign = values['trip_headsign']

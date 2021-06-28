@@ -11,6 +11,15 @@
     <div class="info-box-section">
       % include('components/service_indicator', services=stop.services)
     </div>
+    % if stop.exchange is not None:
+      % exchange = stop.exchange
+      <div class="info-box-section">
+        <div class="info-box-name">Exchange</div>
+        <div class="info-box-value">
+          <a href="{{ get_url(exchange.system, f'exchanges/{exchange.id}') }}">{{ exchange }}</a>
+        </div>
+      </div>
+    % end
     <div class="info-box-section">
       <div class="info-box-name">Route{{ '' if len(stop.routes) == 1 else 's' }}</div>
       <div class="info-box-value">

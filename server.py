@@ -242,6 +242,32 @@ def system_trips_id(system_id, trip_id):
         return systems_error_template(system, f'Trip {trip_id} Not Found', 'This trip may be from an older version of GTFS which is no longer valid')
     return systems_template('trip', system=system, trip=trip)
 
+@app.route('/exchanges')
+@app.route('/exchanges/')
+def exchanges():
+    return system_exchanges(None)
+
+@app.route('/<system_id>/exchanges')
+@app.route('/<system_id>/exchanges/')
+def system_exchanges(system_id):
+    return systems_template('exchanges', system=get_system(system_id), path='exchanges')
+
+@app.route('/exchanges/<name>')
+@app.route('/exchanges/<name>/')
+def exchanges_name(name):
+    return system_exchanges_name(None, name)
+
+@app.route('/<system_id>/exchanges/<name>')
+@app.route('/<system_id>/exchanges/<name>/')
+def system_exchanges_name(system_id, name):
+    system = get_system(system_id)
+    if system is None:
+        return systems_invalid_template(system_id)
+    exchange = system.get_exchange(name)
+    if exchange is None:
+        return systems_error_template(system, f'{exchange} Not Found')
+    return systems_template('exchange', system=system, exchange=exchange)
+
 @app.route('/stops/<number:int>')
 @app.route('/stops/<number:int>/')
 def stops_number(number):

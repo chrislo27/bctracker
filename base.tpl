@@ -49,6 +49,7 @@
           <a class="navbar-item" href="{{ get_url(None, 'history') }}">History</a>
           <a class="navbar-item" href="{{ get_url(None, 'routes') }}">Routes</a>
           <a class="navbar-item" href="{{ get_url(None, 'blocks') }}">Blocks</a>
+          <a class="navbar-item" href="{{ get_url(None, 'exchanges') }}">Exchanges</a>
           <a class="navbar-item" href="{{ get_url(None, 'about') }}">About</a>
 
           % if len(systems) > 1:
@@ -86,6 +87,7 @@
 
           <a class="navbar-item" href="{{ get_url(system, 'routes') }}">Routes</a>
           <a class="navbar-item" href="{{ get_url(system, 'blocks') }}">Blocks</a>
+          <a class="navbar-item" href="{{ get_url(system, 'exchanges') }}">Exchanges</a>
           <a class="navbar-item" href="{{ get_url(system, 'about') }}">About</a>
 
           % if len(systems) > 1:

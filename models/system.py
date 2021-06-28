@@ -17,7 +17,9 @@ class System:
     def __lt__(self, other):
         return self.name < other.name
     
-    # Methods for blocks
+    def add_block(self, block):
+        self.blocks[block.id] = block
+    
     def get_block(self, block_id):
         if block_id in self.blocks:
             return self.blocks[block_id]
@@ -25,6 +27,17 @@ class System:
 
     def all_blocks(self):
         return sorted(self.blocks.values())
+    
+    def add_exchange(self, exchange):
+        self.exchanges[exchange.id] = exchange
+
+    def get_exchange(self, exchange_id):
+        if exchange_id in self.exchanges:
+            return self.exchanges[exchange_id]
+        return None
+    
+    def all_exchanges(self):
+        return sorted(self.exchanges.values())
 
     def get_route(self, route_id = None, number = None):
         if route_id is not None and route_id in self.routes:
